@@ -97,7 +97,11 @@ FROM likes GROUP BY gender ORDER BY likes_qty;
 /* 5. Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети.*/
 -- меньше всех сообщений, лайков, медиа?
 
+-- это вывод кол-ва лайков для каждого пользователя
+SELECT user_id, COUNT(*) FROM likes GROUP BY user_id;
 
+-- это подсчёт вывода кол-ва сообщений от пользователя
+SELECT from_user_id, COUNT(*) FROM messages GROUP BY from_user_id;
 
 
 
