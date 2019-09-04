@@ -104,8 +104,13 @@ SELECT user_id, COUNT(*) FROM likes GROUP BY user_id;
 SELECT from_user_id, COUNT(*) FROM messages GROUP BY from_user_id;
 
 -- это подсчёт кол-ва медиафайлов юзера
-SELECT user_id, COUNT(*) FROM media GROUP BY user_id
+SELECT user_id, COUNT(*) FROM media GROUP BY user_id;
 
--- надо просуммировать данные по этим таблицам в одном запросе, это и будет показателем активности
+-- надо просуммировать данные по этим таблицам в одном запросе
+SELECT * FROM (SELECT user_id, COUNT(*) FROM likes GROUP BY user_id UNION ALL
+	SELECT from_user_id, COUNT(*) FROM messages GROUP BY from_user_id UNION ALL
+		SELECT user_id, COUNT(*) FROM media GROUP BY user_id) AS all_tables;
+		
+-- 
 
 
