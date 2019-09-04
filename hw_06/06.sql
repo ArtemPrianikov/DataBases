@@ -85,8 +85,6 @@ SELECT user_id, (SELECT sex FROM profiles WHERE id = user_id) FROM likes;
 SELECT COUNT(*) as likes_qty, (SELECT sex FROM profiles WHERE id=user_id) AS gender
 FROM likes GROUP BY gender ORDER BY likes_qty;
 
-
-SELECT COUNT(*) FROM profiles ORDER BY birthday DESC LIMIT 10;
 /*
 +-----------+------+
 | likes_qty | sex  |
