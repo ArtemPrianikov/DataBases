@@ -1,12 +1,30 @@
 /* 1. Проанализировать запросы, которые выполнялись на занятии, определить возможные корректировки
 и/или улучшения (JOIN пока не применять).*/
-не хватило времени, буду постепенно доделывать
+пока основное время ушло на практику сложных запросов
 
 /* 2. Пусть задан некоторый пользователь. 
 Из всех друзей этого пользователя найдите человека, который больше всех общался с нашим пользоваетелем.*/
--- подсчитать кол-во сообщений?
-не хватило времени, буду постепенно доделывать
+-- В итоговой таблице должен быть user_id пользователя и пусть будет кол-во сообщений
+-- ДОлжно получиться что-то типа этого:
+SELECT
+	'user_id',
+	'message_qty'
+FROM 
+	'объединённая таблица сообщений от пользователя и к пользователю'
+WHERE user_id = x
+ORDER BY
+	'message_qty'
+	DESC
+LIMIT 1;
 
+-- это кол-во сообщений, относящихся к конкретному пользователю (от него и к нему)
+SELECT user_id, COUNT(*) FROM (
+SELECT from_user_id as user_id FROM messages GROUP BY user_id
+UNION
+SELECT to_user_id as user_id FROM messages GROUP BY user_id) AS united_table;
+
+Задание не доделано, в процессе
+	
 /* 3. Подсчитать общее количество лайков, которые получили 10 самых молодых пользователей.*/
 -- научиться получать 10 самых молодых пользователей
 -- подсчитать сумму их лайков
@@ -107,10 +125,17 @@ SELECT from_user_id, COUNT(*) FROM messages GROUP BY from_user_id;
 SELECT user_id, COUNT(*) FROM media GROUP BY user_id;
 
 -- надо просуммировать данные по этим таблицам в одном запросе
-SELECT * FROM (SELECT user_id, COUNT(*) FROM likes GROUP BY user_id UNION ALL
-	SELECT from_user_id, COUNT(*) FROM messages GROUP BY from_user_id UNION ALL
-		SELECT user_id, COUNT(*) FROM media GROUP BY user_id) AS all_tables;
-		
--- 
-
+SELECT user_id, SUM(acts) as total FROM
+	(SELECT user_id, COUNT(*) as acts
+		FROM likes GROUP BY user_id 
+			UNION ALL
+	SELECT from_user_id, COUNT(*)
+		FROM messages 
+			GROUP BY from_user_id 
+				UNION ALL
+	SELECT user_id, COUNT(*) FROM media GROUP BY user_id)
+	AS all_tables
+GROUP BY user_id
+ORDER BY total DESC
+LIMIT 10;
 
