@@ -102,20 +102,6 @@ SELECT * FROM
 
 
 
-SELECT ms.from_user_id, ms.to_user_id
-	FROM
-	messages as ms
-	JOIN
-	messages as me
-	JOIN
-	friendship as f
-	ON f.user_id = 66
-	AND
-	ms.from_user_id = f.user_id
-	AND
-	me.to_user_id = f.user_id;	
-
-
 -- теперь нужны агрегационные команды
 -- тут сразу видно, что нет такого пользователя, который общался бы больше других, поэтому проверить наглядно будет трудно
 -- тем не менее, попробуем развить решение
