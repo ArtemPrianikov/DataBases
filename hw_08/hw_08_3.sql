@@ -65,17 +65,25 @@ SELECT ms.from_user_id, ms.to_user_id
 |           67 |         66 |
 +--------------+------------+*/	
 
--- вообще пока без таблицы дружбы попробуем ещё
-SELECT *
+-- может, объединить их горизонтально через union?
+SELECT * FROM
+	(SELECT ms.from_user_id, ms.to_user_id
 	FROM
 	messages as ms
 	JOIN
-	messages as me
-	ON
-	ms.from_user_id = 66
+	friendship as f
+	ON f.user_id = 66
 	AND
-	me.to_user_id = 66;
-	
+	ms.from_user_id = f.user_id
+	UNION
+	SELECT ms.from_user_id, ms.to_user_id
+	FROM
+	messages as ms
+	JOIN
+	friendship as f
+	ON f.user_id = 66
+	AND
+	ms.to_user_id = f.user_id) AS t2;	
 
 
 
