@@ -67,7 +67,7 @@ SELECT ms.from_user_id, ms.to_user_id
 
 -- может, объединить их горизонтально через union?
 SELECT * FROM
-	(SELECT ms.from_user_id, ms.to_user_id
+	(SELECT ms.from_user_id as user, ms.to_user_id as message_to_or_from
 	FROM
 	messages as ms
 	JOIN
@@ -76,7 +76,7 @@ SELECT * FROM
 	AND
 	ms.from_user_id = f.user_id
 	UNION
-	SELECT ms.from_user_id, ms.to_user_id
+	SELECT ms.to_user_id as message_to_or_from, ms.from_user_id as user
 	FROM
 	messages as ms
 	JOIN
@@ -85,6 +85,40 @@ SELECT * FROM
 	AND
 	ms.to_user_id = f.user_id) AS t2;	
 
+/* вот, получил более-менее то, что мне нужно: сообщения от и к пользователю, всего 9
++------+--------------------+
+| user | message_to_or_from |
++------+--------------------+
+|   66 |                 42 |
+|   66 |                 68 |
+|   66 |                 18 |
+|   66 |                 79 |
+|   66 |                 36 |
+|   66 |                 16 |
+|   66 |                 57 |
+|   66 |                 60 |
+|   66 |                 67 |
++------+--------------------+*/
+
+
+
+SELECT ms.from_user_id, ms.to_user_id
+	FROM
+	messages as ms
+	JOIN
+	messages as me
+	JOIN
+	friendship as f
+	ON f.user_id = 66
+	AND
+	ms.from_user_id = f.user_id
+	AND
+	me.to_user_id = f.user_id;	
+
+
+-- теперь нужны агрегационные команды
+-- тут сразу видно, что нет такого пользователя, который общался бы больше других, поэтому проверить наглядно будет трудно
+-- тем не менее, попробуем развить решение
 
 
 /* 2. Подсчитать общее количество лайков, которые получили 10 самых молодых пользователей.
