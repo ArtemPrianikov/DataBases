@@ -216,4 +216,35 @@ UPDATE products SET name = NULL WHERE id = 10;
 создано два триггера, но должно быть какое-то универсальное решение, более изящное, чтобы в одном триггере всё объединить.
 Конструкция CREATE TRIGGER nonull_update BEFORE UPDATE, INSERT ON products приводит к ошибке */
 
- 
+
+/* 
+(по желанию) Напишите хранимую функцию для вычисления произвольного числа Фибоначчи.
+Числами Фибоначчи называется последовательность в которой число равно сумме двух предыдущих чисел.
+Вызов функции FIBONACCI(10) должен возвращать число 55. */
+
+DELIMITER //
+DROP FUNCTION IF EXISTS fibbo//
+CREATE FUNCTION fibbo ()
+RETURNS INT DETERMINISTIC
+BEGIN
+	RETURN 134;
+END//
+-- пока всё работает
+
+-- создадим цикл + возможность возвращать результат работы приращённой в цикле переменной
+DROP FUNCTION IF EXISTS fibbo//
+CREATE FUNCTION fibbo (high INT)
+RETURNS INT DETERMINISTIC
+BEGIN
+	DECLARE counter INT DEFAULT 0;
+	DECLARE sum_number INT DEFAULT 0;
+	DECLARE prev_number INT DEFAULT 0;
+		WHILE counter <= high DO
+			SET sum_number = sum_number + counter;
+			SET counter = counter + 1;
+		END WHILE;
+	RETURN sum_number;	
+END//
+
+-- теперь усложним расчёты внутри функции
+
